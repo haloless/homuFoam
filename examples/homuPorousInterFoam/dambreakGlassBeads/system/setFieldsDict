@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      setFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+defaultFieldValues
+(
+    volScalarFieldValue alpha.water 0
+    volScalarFieldValue varepsilon 1
+);
+
+regions
+(
+    boxToCell
+    {
+        // water dam
+        box (0 0 -1) (0.28 0.25 1);
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
+    boxToCell
+    {
+        // water layer
+        box (0 0 -1) (1 0.025 1);
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
+    boxToCell
+    {
+        // porous baffle in [0.30<x<0.59]
+        box (0.3 0.0 -1) (0.59 1.0 1);
+        fieldValues
+        (
+            volScalarFieldValue varepsilon 0.39
+        );
+    }
+);
+
+
+// ************************************************************************* //
