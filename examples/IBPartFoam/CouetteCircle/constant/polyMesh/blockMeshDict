@@ -1,0 +1,174 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.05;
+
+//
+R0 0.5;
+R1 1.0;
+zMin -0.25;
+zMax 0.25;
+
+arcR0 #calc "$R0 * sqrt(2.0)/2.0";
+arcR1 #calc "$R1 * sqrt(2.0)/2.0";
+
+// 
+//nR 5;
+//nT 18;
+//nZ 5;
+
+//nR 12;
+//nT 48;
+//nZ 12;
+
+nR 16;
+nT 48;
+nZ 16;
+
+
+vertices
+(
+    ($R0 0.0 $zMin)
+    ($R0 0.0 $zMax)
+    
+    ($R1 0.0 $zMin)
+    ($R1 0.0 $zMax)
+    
+    (0.0 $R1 $zMin)
+    (0.0 $R1 $zMax)
+    
+    (0.0 $R0 $zMin)
+    (0.0 $R0 $zMax)
+    
+);
+
+blocks
+(
+    //hex (0 1 2 3 4 5 6 7) (1 15 45) simpleGrading (1 1 1)
+    hex (0 2 4 6 1 3 5 7) ($nR $nT $nZ) simpleGrading (1 1 1)
+);
+
+edges
+(
+    arc 0 6 ($arcR0 $arcR0 $zMin)
+    arc 1 7 ($arcR0 $arcR0 $zMax)
+
+    arc 2 4 ($arcR1 $arcR1 $zMin)
+    arc 3 5 ($arcR1 $arcR1 $zMax)
+);
+
+boundary
+(
+    innerCylinder
+    {
+        type wall;
+        faces
+        (
+            (0 1 7 6)
+        );
+    }
+    outerCylinder
+    {
+        type wall;
+        faces
+        (
+            (2 4 5 3)
+        );
+    }
+    
+    left
+    {
+        type cyclic;
+        neighbourPatch down;
+        
+        faces
+        (
+            (6 7 5 4)
+        );
+    }
+    down
+    {
+        type cyclic;
+        neighbourPatch left;
+        
+        faces
+        (
+            (0 2 3 1)
+        );
+    }
+    
+    front
+    {
+        type cyclic;
+        neighbourPatch back;
+        
+        faces
+        (
+            (6 4 2 0)
+        );
+    }
+    back
+    {
+        type cyclic;
+        neighbourPatch front;
+        
+        faces
+        (
+            (1 3 5 7)
+        );
+    }
+    /*
+    top
+    {
+        type wall;
+        faces
+        (
+            (4 5 6 7)
+        );
+    }
+
+    bottom
+    {
+        type wall;
+        faces
+        (
+            (0 1 2 3)
+        );
+    }
+
+    walls
+    {
+        type wall;
+        faces
+        (
+            (0 1 5 4)
+            (2 3 7 6)
+        );
+    }
+
+    frontAndBack
+    {
+        type symmetry;
+        faces
+        (
+            (1 2 6 5)
+            (3 0 4 7)
+        );
+    }
+    */
+);
+
+// ************************************************************************* //

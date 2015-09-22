@@ -16,3 +16,8 @@ Currently, it has drag force model based on Ergun's equation.
 The source terms by `fvOptions` can also be used.
 It will be interesting to add a capillary effect in the porous medium.
 
+## IBPartFoam
+
+Immersed Boundary
+
+

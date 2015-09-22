@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+#
+*.dep
+*.OpenFOAM
+VTK
+dynamicCode
+
+
+
